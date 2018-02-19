@@ -46,51 +46,37 @@ public class DefendYourCode {
 		System.out.println("Please enter a password containing:\n\t6 to 16 alphabetic and numeric characters"
 				+ "\n\tAt least one alphabetic and one numeric password"
 				+ "\n\tAt least one uppercase and one lowercase letter");
+		
 		Scanner kb = new Scanner(System.in);
-		boolean stopLoop = false;
-		String firstPass = "";
-		//Looping to check the first password.
-		while(false == stopLoop)
-		{
-			firstPass = kb.nextLine();
-			stopLoop = password(firstPass);
-		}
-		SecureRandom rng = new SecureRandom();
-		byte[] salt = new byte[8];
-		rng.nextBytes(salt);
-
-		byte[] hashed =Arrays.copyOf(firstPass.getBytes(), (firstPass.length() + salt.length));
-		int counter = 0;
-		for(int i = firstPass.length(); i < hashed.length; i++)
-		{
-			hashed[i] = salt[counter];
-			counter++;
-		}
+		String firstPass = password(kb);
+		String salt = saltMine();
+		System.out.println(salt);
+		byte[] firstHash = hashThePass(firstPass, salt);
 		File db =  new File("privateDBpleasedonttouch.txt");
-
+		System.out.println(salt);
 		//Rewrites the file every time.
 		//PrintWriter out = new PrintWriter(new FileWriter(db, false));
 		//Now we encrypt
-		MessageDigest md = MessageDigest.getInstance("md5");
-		md.update(hashed);
-		try (Writer out = new BufferedWriter(new OutputStreamWriter(
-	              new FileOutputStream("filename.txt"), "utf-8"))) {
-			out.write("Input");
-			/*out.write(salt.toString());
-			out.write(md.digest().toString());*/
-	}
+		//After this, we just have to digest the hash and store it along with the salt
 
-		for(byte b: hashed)
-			System.out.print(b);
-		System.out.println();
-		for(byte z: salt)
-			System.out.print(z);
-		System.out.println("Done!");
 		
 		Scanner reader = new Scanner(db);
+		//String newSalt = reader.nextLine();
 		
+		//Looping to check the second password.
+		System.out.println("Please enter the password again to verify.");
+		String secondPassword = password(kb);
+		System.out.println(salt);
+		byte[] newHash = hashThePass(secondPassword, salt);
+		
+		if(MessageDigest.isEqual(firstHash, newHash))
+			System.out.println("Hurray! You remembered your password!");
+		else
+			System.out.println("Sorry, your password is incorrect.");
+		
+		System.out.println(salt);
 	}
-	public static boolean password(String inp)
+	public static String password(Scanner kb)
 	{
 		//6 characters minimum, 16 maximum
 		//one upperCase, lowercase, digit, alphabetic
@@ -99,17 +85,46 @@ public class DefendYourCode {
 				+ "(?=[^A-Z]*[A-Z])"	//check for uppercase
 				+ "(?=[^a-z]*[a-z])" 	//lowercase
 				+ "");//end of string
-		Matcher matcher = pattern.matcher(inp);
-
-		if(matcher.find())
+		boolean looping = true;
+		String attemptedPassword = "";
+		while(true == looping)
 		{
-			System.out.println(inp + " is a valid password. Hashing and salting now!");
-			return true;
-		}	
-		else{
-			System.out.println(inp + " is an invalid password.");
-			return false;
+			attemptedPassword = kb.nextLine();
+			Matcher matcher = pattern.matcher(attemptedPassword);
+			if(matcher.find())
+			{
+				System.out.println(attemptedPassword + " is a valid password.");
+				looping = false;
+			}	
+			else{
+				System.out.println(attemptedPassword + " is an invalid password. Please enter a valid password");
+			}
 		}
+		return attemptedPassword;
 	}
+	
+	
+	public static byte[] hashThePass(String pass, String salt) throws NoSuchAlgorithmException
+	{
+		int newArrayLength = pass.getBytes().length + salt.getBytes().length;
+		byte[] ret = Arrays.copyOf(pass.getBytes(), newArrayLength);
+		
+		for(int i = pass.getBytes().length; i < ret.length - 1; i++)
+			ret[i] = salt.getBytes()[i - salt.getBytes().length];
+		
+		MessageDigest md = MessageDigest.getInstance("md5");
+		md.update(ret);
+		
+		return md.digest();
+	}
+	public static String saltMine(){
+		String ret = "";
+		SecureRandom rng = new SecureRandom();
+		for(int i = 0; i < 8; i++)
+			ret = ret + rng.nextInt(10);
+		
+		return ret;
+	}
+
 
 }
