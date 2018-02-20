@@ -52,13 +52,16 @@ public class DefendYourCode {
 		String salt = saltMine();
 		System.out.println(salt);
 		byte[] firstHash = hashThePass(firstPass, salt);
-		File db =  new File("privateDBpleasedonttouch.txt");
+		File db =  new File("privateDB.txt");
 		System.out.println(salt);
 		//Rewrites the file every time.
 		//PrintWriter out = new PrintWriter(new FileWriter(db, false));
 		//Now we encrypt
 		//After this, we just have to digest the hash and store it along with the salt
-
+		PrintWriter hashStorage = new PrintWriter(db);
+		hashStorage.println(salt);
+		hashStorage.println(firstHash);
+		
 		
 		Scanner reader = new Scanner(db);
 		//String newSalt = reader.nextLine();
