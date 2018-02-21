@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -23,6 +24,8 @@ public class DefendYourCode {
 		//read two ints in
 		int num1 = readInt(kb);
 		int num2 = readInt(kb);
+		long add = (long)num1 + (long)num2;
+		long mult = (long)num1 * (long)num2;
 		//read in two file names and open them
 		File inputFile = openFile(kb, "Input");
 		File outputFile = openFile(kb, "Output");
@@ -31,8 +34,8 @@ public class DefendYourCode {
 		//print all stuff to outputfile
 		output.println("the name is "+fname+" "+lname);
 		output.println("the numbers were "+num1+" "+num2);
-		output.println(num1+"+"+num2+" is "+(num1+num2));
-		output.println(num1+"*"+num2+" is "+(num1*num2));
+		output.println(num1+"+"+num2+" is "+add);
+		output.println(num1+"*"+num2+" is "+mult);
 		output.println("Now entering the contents of the input file to the output file");
 		Scanner infScanner = new Scanner(inputFile);
 		while(infScanner.hasNextLine())
@@ -64,26 +67,25 @@ public class DefendYourCode {
 	}
 	public static int readInt(Scanner kb)
 	{
-		String regex = "[0-9]{1,4}";
+		System.out.println("Please enter an integer:");
 		boolean b = false;
 		String input = "";
-		Pattern p = Pattern.compile(regex);
 		do
 		{
-			System.out.println("Please enter a number (no more than 4 digits)");
 			input = kb.nextLine();
-			Matcher m = p.matcher(input);
-			b = m.matches();
-			if(b == false)
+			try{
+				int ret = Integer.parseInt(input);
+				b = true;
+			}catch(Exception e)
 			{
-				System.out.println("Please enter a valid number (no more than 4 digits");
+				System.out.println("Enter an INTEGER. >=(");
 			}
 		}while(b == false);
 		return Integer.parseInt(input);
 	}
 	public static File openFile(Scanner kb, String typeOfFile)
 	{
-		String regex = "(?!//)[A-Za-z]{1,10}";
+		String regex = "(?!//)[A-Za-z]{1,10}(\\.txt)";
 		boolean b = false;
 		String input = "";
 		File inf = new File("haha");
@@ -112,6 +114,7 @@ public class DefendYourCode {
 		String salt = saltMine();
 		byte[] firstHash = hashThePass(firstPass, salt);
 		File db =  new File("privateDB.txt");
+		
 		//After this, we just have to digest the hash and store it along with the salt
 		PrintWriter hashStorage = new PrintWriter(db);
 		hashStorage.println(salt);
@@ -131,18 +134,25 @@ public class DefendYourCode {
 		
 		//Looping to check the second password.
 		System.out.println("Please enter the password again to verify.");
-		String secondPassword = password(kb);
-		byte[] newHash = hashThePass(secondPassword, newSalt);
-		
-		//This converts the new password to a string so we can compare it to the one we read from a file
-		String newHashAsString = "";
-		for(byte b: newHash)
-			newHashAsString = newHashAsString + b;
-		System.out.println(newHashAsString);
-		if(newHashAsString.equals(oldHash))
-			System.out.println("Hurray! You remembered your password!");
-		else
-			System.out.println("Sorry, your password is incorrect.");
+		boolean verified = false;
+		while(false == verified)
+		{
+			String secondPassword = password(kb);
+			byte[] newHash = hashThePass(secondPassword, newSalt);
+			
+			//This converts the new password to a string so we can compare it to the one we read from a file
+			String newHashAsString = "";
+			for(byte b: newHash)
+				newHashAsString = newHashAsString + b;
+			System.out.println(newHashAsString);
+			if(newHashAsString.equals(oldHash))
+			{
+				System.out.println("Hurray! You remembered your password!");
+				verified = true;
+			}
+			else
+				System.out.println("Sorry, your password is incorrect.");
+		}
 	}
 	public static String password(Scanner kb)
 	{
