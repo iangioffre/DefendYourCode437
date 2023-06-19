@@ -1,6 +1,5 @@
-package DefendYourCode;
 
-import java.io.File;
+import java.io.FileTester;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
