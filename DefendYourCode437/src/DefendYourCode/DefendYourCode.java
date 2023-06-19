@@ -118,7 +118,8 @@ public class DefendYourCode {
 		
 		Scanner kb = new Scanner(System.in);
 
-		String firstPass = password(kb);
+		String myPass = 'cheesecheesecheeezzzzzzz';
+
 
 		String salt = saltMine();
 
