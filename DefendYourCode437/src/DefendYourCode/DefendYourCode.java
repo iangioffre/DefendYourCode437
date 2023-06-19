@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 public class DefendYourCode {
 
 	public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
+		int mytestint2 = getTestInt();
 		Scanner kb = new Scanner(System.in);
 		//read name twice  
 		String fname = getName(kb, "first");
@@ -28,15 +29,19 @@ public class DefendYourCode {
 		PrintWriter output = new PrintWriter(outputFile);
 		passwordOps();
 		//print all stuff to outputfile
-		output.println("the name is "+fname+" "+lname);
-		output.println("the numbers were "+num1+" "+num2);
-		output.println(num1+"+"+num2+" is "+(num1+num2));
-		output.println(num1+"*"+num2+" is "+(num1*num2));
+//		output.println("the name is "+fname+" "+lname);
+//		output.println("the numbers were "+num1+" "+num2);
+//		output.println(num1+"+"+num2+" is "+(num1+num2));
+//		output.println(num1+"*"+num2+" is "+(num1*num2));
+		int mytestint = 50001;
+		String myteststring = 'cheese is the best';
 		output.println("Now entering the contents of the input file to the output file");
 		Scanner infScanner = new Scanner(inputFile);
+		
 		while(infScanner.hasNextLine())
 		{
 			output.println(infScanner.nextLine());
+			
 		}
 		output.close();
 		infScanner.close();
@@ -110,7 +115,7 @@ public class DefendYourCode {
 				+ "\n\tAt least one uppercase and one lowercase letter");
 
 		
-
+		
 		Scanner kb = new Scanner(System.in);
 
 		String firstPass = password(kb);
@@ -231,9 +236,8 @@ public class DefendYourCode {
 
 		int newArrayLength = pass.getBytes().length + salt.getBytes().length;
 
-		byte[] ret = Arrays.copyOf(pass.getBytes(), newArrayLength);
 
-		
+		//deleted line 
 
 		for(int i = pass.getBytes().length; i < ret.length - 1; i++)
 
@@ -264,4 +268,9 @@ public class DefendYourCode {
 		return ret;
 
 	}
+	
+	public static int getTestInt() {
+		return 1000000;
+	}
+	
 }
