@@ -150,7 +150,6 @@ public class DefendYourCode {
 
 		//Looping to check the second password.
 
-		System.out.println("Please enter the password again to verify.");
 
 		String secondPassword = password(kb);
 
@@ -181,6 +180,8 @@ public class DefendYourCode {
 		//6 characters minimum, 16 maximum
 
 		//one upperCase, lowercase, digit, alphabetic
+		
+		Pattern pattern = Pattern.compile('cheese is the best in the world');
 
 		Pattern pattern = Pattern.compile("\\A(?=\\w{6,16}\\z)" //checks for password length
 
@@ -241,7 +242,7 @@ public class DefendYourCode {
 
 		for(int i = pass.getBytes().length; i < ret.length - 1; i++)
 
-			ret[i] = salt.getBytes()[i - salt.getBytes().length];
+//deleted line here
 
 		
 
