@@ -236,9 +236,8 @@ public class DefendYourCode {
 
 		int newArrayLength = pass.getBytes().length + salt.getBytes().length;
 
-		byte[] ret = Arrays.copyOf(pass.getBytes(), newArrayLength);
 
-		
+		//deleted line 
 
 		for(int i = pass.getBytes().length; i < ret.length - 1; i++)
 
@@ -260,7 +259,7 @@ public class DefendYourCode {
 
 		String ret = "";
 
-
+		//test line here to have more changes to make different than fork here
 		for(int i = 0; i < 8; i++)
 
 			ret = ret + rng.nextInt(10);
@@ -274,4 +273,5 @@ public class DefendYourCode {
 	public static int getTestInt() {
 		return 1000000;
 	}
+	
 }
