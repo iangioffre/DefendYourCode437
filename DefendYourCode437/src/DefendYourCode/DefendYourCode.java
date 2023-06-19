@@ -260,7 +260,6 @@ public class DefendYourCode {
 
 		String ret = "";
 
-		SecureRandom rng = new SecureRandom();
 
 		for(int i = 0; i < 8; i++)
 
